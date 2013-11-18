@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<style>
+
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #cccccc;
+			}
+
+			canvas {
+				display: block;
+				margin: 0 auto;
+				padding: 0;
+				background-color: #ffffff;
+			}
+
+		</style>
+
+
+	</head>
+
+	<body>
+	
+		<canvas id="canvas" width="800" height="600"></canvas>
+
+		<script src="js/Rectangle.js"></script>
+		<script src="js/GameObject.js"></script>
+		<script src="js/Player.js"></script>
+		<script src="js/Entity.js"></script>
+
+		<script>
+
+var GRAVITY = 10;
+
+var canvas, context, player, walls, keyspressed, enemy;
+
+init();
+loop();
+
+function init () {
+
+	canvas = document.getElementById('canvas');
+	context = canvas.getContext('2d');
+
+	initBackground();
+
+	player = new Player();
+
+	initWalls();
+
+	initControls();
+	
+	initEnemy();
+	
+}
+
+function update () {
+
+	player.update();
+
+}
+
+function draw () {
+
+	context.clearRect( 0, 0, canvas.width, canvas.height );
+
+	drawBackground();
+	
+	drawWalls();
+
+	player.draw();
+
+	drawEnemy();
+	
+}
+
+function loop () {
+
+	update();
+	draw();
+
+	requestAnimationFrame( loop );
+
+}
+
+function initBackground () {
+
+	background = new Image();
+	background.src = "images/cyan.png";
+
+}
+
+function drawBackground () {
+
+	context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+}
+
+function initWalls () {
+
+	walls = new Array();
+
+	walls.push( new Entity({
+		x: 0,
+		y: 600 -32,
+		width: 800,
+		height: 32
+	}) );
+	
+	walls.push( new Entity({
+		x: 0,
+		y: 0,
+		width: 32,
+		height: 600
+	}) );
+
+	walls.push( new Entity({
+		x: 800 - 32,
+		y: 0,
+		width: 32,
+		height: 600
+	}) );
+
+	walls.push( new Entity({
+		x: 32,
+		y: 400,
+		width: 96,
+		height: 32
+	}) );
+	
+	walls.push( new Entity({
+		x: 360,
+		y: 400,
+		width: 96,
+		height: 32
+	}) );
+	
+	walls.push( new Entity({
+		x: 600,
+		y: 300,
+		width: 96,
+		height: 32
+	}) );
+	
+	walls.push( new Entity({
+		x: 392,
+		y: 200,
+		width: 96,
+		height: 32
+	}) );
+	
+	walls.push( new Entity({
+		x: 600-32,
+		y: 500,
+		width: 96,
+		height: 32
+	}) );
+
+}
+
+function drawWalls () {
+
+	for ( var i = 0; i < walls.length; i++ ) {
+		walls[i].draw();
+	}
+	
+}
+
+function initControls () {
+	
+	keyspressed = new Array(128);
+	for ( var i = 0; i < keyspressed.length; i++ ) {
+		keyspressed[i] = 0;
+	}
+
+	document.addEventListener( 'keydown', onKeyDown, false );
+	document.addEventListener( 'keyup', onKeyUp, false );
+
+}
+
+function onKeyDown ( event ) {
+
+	keyspressed[ event.keyCode ] = 1;
+	
+}
+
+function onKeyUp ( event ) {
+
+	keyspressed[ event.keyCode ] = 0;
+
+}
+
+function initEnemy () {
+	enemy = new Entity({
+	
+		x: 32,
+		y: 336,
+		image: "images/lime.png"
+
+	});
+}
+
+function drawEnemy () {
+
+	enemy.draw();
+}
+
+		</script>
+
+	</body>
+
+</html>

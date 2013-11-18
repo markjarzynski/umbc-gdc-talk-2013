@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=1024">
+		
+		<meta name="author" content="Mark Jarzynski">
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<link rel="stylesheet" type="text/css" href="css/rainbow.github.css">
+
+	</head>
+	<body class="impress-not-supported">
+
+		<div class="fallback-message">
+			<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+			<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+		</div>
+
+		<div id="impress">
+
+			<div id="intro" class="step slide" data-x="0" data-y="0">
+					<h1 class="title">RAPID PROTOTYPING</h1>
+					<p class="author">by Mark Jarzynski</p>
+					<div class="date">November 15, 2013</div>
+				
+				</q>
+			</div>
+
+			<div id="second" class="step slide" data-x="1000" data-y="0">
+				<h2 class="heading">HOW?</h2>
+				<ul>
+					<li>Pick a programming language/game engine that you can develop quickly with.</li>
+					<li>Focus on a single game idea/mechanic and make it quickly.</li>
+				</ul>
+			</div>
+
+			<div id="third" class="step slide" data-x="2000" data-y="0">
+				<h2 class="heading">WHY?</h2>
+				<ul>
+					<li>Be able to test a game idea or mechanic without wasting a lot of time developing it.</li>
+				</ul>
+			</div>
+
+			<div id="fourth" class="step slide" data-x="3000" data-y="0">
+				<h2 class="heading">Tips</h2>
+				<ul>
+					<li>Don't worry about performance.</li>
+					<li>Don't worry about optimizing.</li>
+					<li>Don't spend a lot of time on the art (if any).</li>
+					<li>Focus on the game idea/mechanic you're prototyping.</li> 
+				</ul>
+			</div>
+
+			<div id="fifth" class="step" data-x="2000" data-y="3000" data-rotate="90" data-scale="4">
+
+				<h1 class="title">Let's get started</h1>
+
+			</div>
+
+			<div id="init" class="step slide" data-x="0" data-y="1600" data-rotate="90">
+				<h2>Initialize</h2>
+				<pre><code data-language="javascript">function init () {
+	...	
+
+	// initalize everything.
+	initBackground();
+	initWalls();
+	initEntities();
+	initControls();
+	initPlayer();
+
+}</code></pre>
+			</div>
+
+			<div id="update" class="step slide" data-x="0" data-y="2600" data-rotate="90">
+				<h2>UPDATE</h2>
+				<pre><code data-language="javascript">function update () {
+
+	// update only what needs to be updated.
+	updateEnties();
+	updateControls();
+	updatePlayer();
+
+}</code></pre>
+			</div>
+
+			<div id="draw" class="step slide" data-x="0" data-y="3600" data-rotate="90">
+				<h2>DRAW</h2>
+				<pre><code data-language="javascript">function draw () {
+	context.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
+
+	// draw all the things!
+	drawBackground();
+	drawWalls();
+	drawEntites();
+	drawPlayer();
+	
+}</code></pre>
+			</div>
+			
+			<div id="game-loop" class="step slide" data-x="0" data-y="4600" data-rotate="90">
+				<h2>THE GAME LOOP</h2>
+				<pre><code data-language="javascript">function loop () {
+
+	update();
+	draw();
+
+	requestAnimationFrame( loop ); // loop until game is over.
+
+}</code></pre>
+			</div>
+
+			<div id="init-player" class="step slide" data-x="1000" data-y="4600">
+				<h2>initPlayer();</h2>
+				<pre><code data-language="javascript">function initPlayer () {
+	var player = new Player();
+}
+
+var Player = function () {
+
+	this.x = 100;
+	this.y = 100;
+
+	this.width = 60;
+	this.height = 100;
+
+	this.speed = 10;
+	this.jumpForce = 30;
+
+	this.velocity = { x: 0, y: 0 };
+	this.acceleration = { x: 0, y: GRAVITY };
+
+	this.image = new Image(); this.image.src = "images/magenta.png";
+
+};
+</code></pre>
+			</div>
+
+			<div id="update-player" class="step slide" data-x="2000" data-y="4600">
+				<h2>updatePlayer();</h2>
+				<pre><code data-language="javascript">function updatePlayer () {
+	var delta = timeSinceLastUpdate - Date.now();
+
+	if ( Controls.keysDown[65] ) { player.velocity.x = -player.speed; } // 'A'
+	if ( Controls.keysDown[68] ) { player.velocity.x = player.speed; }  // 'D'
+	if ( Controls.keysDown[33] && player.isOnGround ) {                 // 'spacebar'
+		player.acceleration.y = player.jumpForce; player.isOnGround = false;
+	}	
+
+	var previousX = player.x, previousY = player.y;
+
+	player.x += player.velocity.x * delta;
+	player.y += player.velocity.y * delta;
+
+	player.velocity.x += player.acceleration.x * delta;
+	player.velocity.y += player.acceleration.y * delta;
+
+	if ( player.intersects( walls ) ) {
+		// crude method to prevent walking through walls
+		player.x = previousX;
+		player.y = previousY;
+	}
+
+}
+
+</code></pre>
+			</div>
+
+			<div id="draw-player" class="step slide" data-x="3000" data-y="4600">
+				<h2>drawPlayer();</h2>
+				<pre><code data-language="javascript">function drawPlayer () {
+	player.draw();
+}
+
+Player.draw = function () {
+	
+	context.drawImage( player.image, player.x, player.y, player.width, player.height );
+
+};
+
+</code></pre>
+			</div>
+
+			<div id="game1" class="step" data-x="5000" data-y="2600" data-rotate="90">
+				<iframe src="platformer.html" width="800" height="600" style="border: 0; padding: 0; margin: 0"></iframe>
+			</div>
+
+			<div id="spritesheet" class="step slide" data-x="4000" data-y="800">
+				<h1>Simple Spritesheets</h1>
+				<img src="images/robot_walk.png" style="border: 1px solid black;">
+				<ul>
+					<li>Slightly change each image (look at the wheels)</li>
+					<li>Put all frames of the same size in a single image</li>
+					<li>Then slide the image from left to right</li>
+				</ul>
+			</div>
+			
+			<div id="spritesheet-code" class="step slide" data-x="5000" data-y="800">
+				<h1>Animation code</h1>
+				<pre><code data-language="javascript">function update () {	
+	if ( timeSinceLastFrameChange + frameDuration < now ) {
+		frame++;
+	}
+
+	while ( frame >= numFrames ) {
+		frame -= numFrames;
+	}
+}
+
+function draw () {
+
+	context.drawImage( dance, frame * frameWidth, 0, frameWidth, frameHeight, x, y, width, height );
+
+}
+
+</code></pre>
+			</div>
+			
+			<div id="animation" class="step" data-x="4800" data-y="1600" data-scale=".5">
+				<iframe src="spritesheetanimation.html" width="2000" height="800" style="border: 0; padding: 0; margin: 0; overflow: "></iframe>
+
+			</div>
+
+			<div id="overview" class="step" data-x="2000" data-y="2500" data-scale="10"></div>
+		</div>
+
+		<div class="hint">
+			<p>Use the spacebar or arrow keys to navigate</p>
+		</div>
+		<script>
+			
+			if ("ontouchstart" in document.documentElement) {
+				document.quarySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+			}
+
+		</script>
+
+		<script src="js/impress.js"></script>
+		<script>
+
+			impress().init();
+
+		</script>
+		<script src="js/rainbow.min.js"></script>
+		<script src="js/rainbow.generic.js"></script>
+		<script src="js/rainbow.javascript.js"></script>
+		<script>
+
+			Rainbow.color();
+		</script>
+	</body>
+</html>

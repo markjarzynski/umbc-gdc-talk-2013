@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Sprite Sheet Animation</title>
+
+</head>
+<body>
+
+<canvas id="canvas" width="1550" height="1000"></canvas>
+
+<script>
+
+var canvas, context;
+var robot_dance, robot_dance_frame, timeSinceLastFrameChange, frameDuration;
+var robot_walk, robot_walk_frame; 
+
+init();
+loop();
+
+function init () {
+
+	canvas = document.getElementById("canvas");
+	context = canvas.getContext('2d');
+
+	initRobot();
+}
+
+function update () {
+
+	updateRobot();
+
+}
+
+function draw () {
+
+	context.clearRect( 0, 0, canvas.width, canvas.height );
+
+	drawRobot();
+
+}
+
+function loop () {
+
+	update();
+	draw();
+	
+	requestAnimationFrame( loop );
+
+}
+
+function initRobot () {
+
+	robot_dance = new Image();
+	robot_dance.src = "images/robot_dance.png";
+	robot_dance_frame = 0;
+
+	robot_walk = new Image();
+	robot_walk.src = "images/robot_walk.png";
+	robot_walk_frame = 0;
+
+	frameDuration = 60;
+	timeSinceLastFrameChange = Date.now();
+
+}
+
+function updateRobot () {
+
+	var now = Date.now();
+
+	if ( timeSinceLastFrameChange + frameDuration < now ) {
+		robot_dance_frame++;
+		robot_walk_frame++;
+		timeSinceLastFrameChange = now;		
+	}
+
+	while ( robot_dance_frame >= 10 ) {
+		robot_dance_frame -= 10;
+	}
+
+	while ( robot_walk_frame >= 3 ) {
+		robot_walk_frame -= 3;
+	}
+
+}
+
+function drawRobot () {	
+
+	context.drawImage( robot_dance, 0, 0, 1550, 145);
+	context.drawImage( robot_dance, robot_dance_frame * 155, 0, 155, 145, 0, 145, 155, 145 );
+	
+	context.drawImage( robot_walk, 0, 145 * 2, 155 * 3, 145);
+	context.drawImage( robot_walk, robot_walk_frame * 155, 0, 155, 145, 0, 145 * 3, 155, 145 );
+
+}
+
+</script>
+
+</body>
+</html>
